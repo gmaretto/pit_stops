@@ -50,6 +50,12 @@ def split_TIMES(x,starters):
     else:
         return x
 
+def check_times(x):
+    if re.search('[a-zA-Z]', x):
+        return True
+    else: 
+        return False
+
 
 def make_race_df(race_id):
     '''
@@ -166,6 +172,13 @@ def make_race_df(race_id):
 
                 finishers = race_df[race_df['LAP'] == max(race_df['LAP'])]['NO'].unique()
                 finishers = finishers[pd.notna(finishers)]
+                
+                ###checking times
+                _mask = race_df['TIME'].apply(check_times)#.values[0]#.split(' ')[0:2]
+                ###correcting only problem
+                race_df['TIME'][_mask] = '2:11.365'
+                race_df['GAP'][_mask] = '1 LAP'
+
                 race_df.to_csv('clean_frames/race_df_'+str(race_id)+'.csv')
 
             # if 'stop' in _csv.lower():                
