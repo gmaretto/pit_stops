@@ -43,6 +43,14 @@ for race_id in range(counter):
 
     race_df = race_df[~race_df.index.duplicated(keep='first')]
 
+    new_index = [x for x in range(
+        1, race_df.index.get_level_values('LAP').nunique()+1)]
+
+    reindex_d = dict(
+        zip(list(race_df.index.get_level_values('LAP').unique()), new_index))
+
+    race_df.rename(index=reindex_d, level=1)
+
     d_gaps = {}
     for i in range(0, last_lap):
         lap = i+1
